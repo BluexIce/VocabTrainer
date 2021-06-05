@@ -504,6 +504,33 @@ class OneWordScreen(Screen):
         # self.label_Text = self.englishvocab_readable[random.randint(0, len(self.englishvocab_readable) - 1)]
         # self.label_Text = self.englishvocab_readable[random.randint(0, len(self.englishvocab_readable) - 1)]
 
+        
+        with open("vocab_english.txt", "r+", encoding='utf8') as ve:
+            # global englishvocab
+            englishvocab = ve.readlines()
+
+        with open("vocab_turkish.txt", "r+", encoding='utf8') as vt:
+            # print("The new turkish list: " + "\n" + e.read())
+            # global turkishvocab
+            turkishvocab = vt.readlines()
+            turkishvocab_readable = []
+
+            for turkish_element in turkishvocab:
+                turkishvocab_readable.append(turkish_element.strip())
+
+            englishvocab_readable = []
+
+            for english_element in englishvocab:
+                englishvocab_readable.append(english_element.strip())
+
+
+        if englishvocab_readable == self.englishvocab_readable:
+            pass
+        else:
+            self.englishvocab_readable = englishvocab_readable
+            self.turkishvocab_readable = turkishvocab_readable
+        
+        
         self.random_number = random.randint(0, len(self.englishvocab_readable) - 1)
         self.label_Text = self.englishvocab_readable[
             self.random_number]  # works for updating the label, only the label!!!
@@ -648,6 +675,35 @@ class FourWordsScreen(Screen):
         self.dialog_four_word.dismiss()
 
     def update_four(self, *args):
+        
+   
+        with open("vocab_english.txt", "r+", encoding='utf8') as ve:
+            # global englishvocab
+            englishvocab = ve.readlines()
+
+        with open("vocab_turkish.txt", "r+", encoding='utf8') as vt:
+            # print("The new turkish list: " + "\n" + e.read())
+            # global turkishvocab
+            turkishvocab = vt.readlines()
+            turkishvocab_readable = []
+
+            for turkish_element in turkishvocab:
+                turkishvocab_readable.append(turkish_element.strip())
+
+            englishvocab_readable = []
+
+            for english_element in englishvocab:
+                englishvocab_readable.append(english_element.strip())
+
+
+        if englishvocab_readable == self.englishvocab_readable:
+            pass
+        else:
+            self.englishvocab_readable = englishvocab_readable
+            self.turkishvocab_readable = turkishvocab_readable     
+        
+        
+        
         self.random_number_solution_fourword = random.randint(0, len(self.englishvocab_readable) - 1)
         self.random_numbers_answers_fourword = random.sample(range(0, len(self.turkishvocab_readable) - 1),4)  # get index #works on its own
 

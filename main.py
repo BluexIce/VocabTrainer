@@ -1,4 +1,6 @@
 import random
+import Global
+
 
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -141,6 +143,7 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
                 #Move to JSON instead of textfiles?
                 #copy just the rv code to new project to look at it more in depth
                 return self.parent.select_with_touch(self.index, touch)  # highlits itself
+
 
 
     def delete_word(self, obj):
@@ -442,6 +445,11 @@ class ComparisonScreen(Screen):
 
 
 class OneWordScreen(Screen):
+
+    #global counter_wrong
+    #counter_wrong = 0
+    wrong_word_list = []
+
     # label_Text = StringProperty(englishvocab_readable[random_number])
 
     with open("vocab_english.txt", "r+", encoding='utf8') as ve:
@@ -492,6 +500,24 @@ class OneWordScreen(Screen):
                                             )
             self.dialog_one_word.open()
 
+            with open("wrong_vocabs.txt", "r") as wrngvcb_r:
+                number = wrngvcb_r.read()
+
+            if number != "":
+                Global.my_number = int(number)
+
+            Global.my_number += 1
+
+            with open("wrong_vocabs.txt", "w") as wrngvcb_w:
+                wrngvcb_w.write(str(Global.my_number))
+
+
+            self.manager.get_screen('statistics').label_counter = str(Global.my_number)
+            #self.counter_wrong += 1
+            #self.wrong_word_list.append(self.turkishvocab_readable[self.random_number])
+
+
+
     def close_dialog(self, obj):
         self.dialog_one_word.dismiss()
 
@@ -504,7 +530,6 @@ class OneWordScreen(Screen):
         # self.label_Text = self.englishvocab_readable[random.randint(0, len(self.englishvocab_readable) - 1)]
         # self.label_Text = self.englishvocab_readable[random.randint(0, len(self.englishvocab_readable) - 1)]
 
-        
         with open("vocab_english.txt", "r+", encoding='utf8') as ve:
             # global englishvocab
             englishvocab = ve.readlines()
@@ -529,13 +554,15 @@ class OneWordScreen(Screen):
         else:
             self.englishvocab_readable = englishvocab_readable
             self.turkishvocab_readable = turkishvocab_readable
-        
-        
+
+
         self.random_number = random.randint(0, len(self.englishvocab_readable) - 1)
         self.label_Text = self.englishvocab_readable[
             self.random_number]  # works for updating the label, only the label!!!
 
         self.ids.turkish_input.text = ''
+
+
         # self.random_number = random.randint(0, len(self.englishvocab_readable) - 1)
         # self.englishvocab_readable[self.random_number] = self.label_Text
         # print('something happened')
@@ -666,6 +693,22 @@ class FourWordsScreen(Screen):
                                              )
             self.dialog_four_word.open()
 
+            with open("wrong_vocabs.txt", "r") as wrngvcb_r:
+                number = wrngvcb_r.read()
+
+            if number != "":
+                Global.my_number = int(number)
+
+            Global.my_number += 1
+
+            with open("wrong_vocabs.txt", "w") as wrngvcb_w:
+                wrngvcb_w.write(str(Global.my_number))
+
+
+            self.manager.get_screen('statistics').label_counter = str(Global.my_number)
+
+
+
     def close_dialog_four(self, obj):
         self.dialog_four_word.dismiss()
 
@@ -675,8 +718,7 @@ class FourWordsScreen(Screen):
         self.dialog_four_word.dismiss()
 
     def update_four(self, *args):
-        
-   
+
         with open("vocab_english.txt", "r+", encoding='utf8') as ve:
             # global englishvocab
             englishvocab = ve.readlines()
@@ -700,10 +742,9 @@ class FourWordsScreen(Screen):
             pass
         else:
             self.englishvocab_readable = englishvocab_readable
-            self.turkishvocab_readable = turkishvocab_readable     
-        
-        
-        
+            self.turkishvocab_readable = turkishvocab_readable
+
+
         self.random_number_solution_fourword = random.randint(0, len(self.englishvocab_readable) - 1)
         self.random_numbers_answers_fourword = random.sample(range(0, len(self.turkishvocab_readable) - 1),4)  # get index #works on its own
 
@@ -796,13 +837,24 @@ class FourWordsScreen(Screen):
 class StatisticsScreen(Screen):
     # display vocabs you did wrong --> another rv ?
     # ranking list, how many vocabs have been compared overall
-    pass
+    #global counter_wrong
+
+    with open("wrong_vocabs.txt", "r") as number_false:
+        number = number_false.read()
+
+    if number == "":
+        number = "0"
+
+    label_counter = StringProperty(number)
+
+
 
 
 class SettingsScreen(Screen):
     # language menu to select overlay language
     # choose different txt files to practice
     # load your own txt files into the app
+
 
     pass
 

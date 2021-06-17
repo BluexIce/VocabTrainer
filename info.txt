@@ -1,0 +1,49 @@
+
+New Implementations:
+
+-GUI Interface (Python Tkinter / Java Javafx)
+
+-UTF8 -Umlaute! turkish is not properly displayed in the console
+
+#- Search a word and delete it/change it  #check
+-->make remove_word(), that you can search for a word first and then delete it, if not found you have the option to create a new entry.
+-->search bar on the top, search button and delete button on the bottom, search result field in the middle
+-->real time search possible? (with database maybe)
+
+-Main Menu where you select what you want to do
+
+-repeat wrong vocabs more often
+--> a new compare tab with hard/wrong vocabs (diff vocab lists)
+
+
+-ranking list, how many vocabs have been compared overall
+
+-language tab with different languages (different vocab lists)
+
+-design (kivy?)/ HTML&CSS
+
+-Example sentences with gaps
+
+-save as txt files or use database?
+
+//-Pictures to single words? (like Duolingo)
+
+-dictionary to search words in both languages
+--> search a word and get the translation
+--> get some example sentences
+
+-translate to different programming language?
+--> Java (GUI Software)--> Kotlin (Mobile Dev)
+--> Dart/Flutter (Mobile dev)
+
+-different exercises (different subject areas)
+
+- 4 different words displayed(english) -> compare with one turkish word (quick exercise)
+
+-time trial  --> every exercise mixed with limited time
+
+-Yes/No questions --> word given -> right or wrong
+
+-custom icons for my app (for a bottom navigation)
+
+-dictionary with python dict?

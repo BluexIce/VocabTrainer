@@ -277,6 +277,16 @@ ScreenManager:
     name: 'statistics'
 
     BoxLayout:
+        orientation: 'vertical'
+        
+        MDLabel:
+            text: 'Word Counter'
+            halign: 'center'
+
+        MDLabel:
+            id: wrong_number_counter
+            text: root.label_counter
+            halign: 'center'
 
         Button:
             text: 'Back'

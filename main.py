@@ -37,6 +37,39 @@ class MenuScreen(Screen):
 
 class DictionaryScreen(Screen):
     # add dictionary  --> realtime search for words with example sentences
+    
+    label_searchengine = StringProperty('test')
+
+
+
+    def searchforword(self):
+
+
+        with open("vocab_turkish.txt", "r+") as r:
+            turkishvocab = r.readlines()
+            turkishvocab_readable = []
+
+            for turkish_element in turkishvocab:
+                turkishvocab_readable.append(turkish_element.strip())
+
+        with open("vocab_english.txt", "r+") as r:
+            englishvocab = r.readlines()
+            englishvocab_readable = []
+
+            for english_element in englishvocab:
+                englishvocab_readable.append(english_element.strip())
+
+        if self.ids.search_vocab.text in englishvocab_readable:
+
+            indexenglishword = englishvocab_readable.index(self.ids.search_vocab.text)
+            translated = turkishvocab_readable[indexenglishword]
+            self.label_searchengine = translated
+        else:
+            self.label_searchengine = 'No entry for ' + self.ids.search_vocab.text
+
+
+
+    
     pass
 
 

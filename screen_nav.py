@@ -304,7 +304,7 @@ ScreenManager:
             cols: 2
         
             MDLabel:
-                text: 'Word Counter'
+                text: 'Wrong Word Counter'
                 halign: 'center'
             MDLabel:
                 id: wrong_number_counter

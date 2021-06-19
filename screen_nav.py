@@ -47,6 +47,27 @@ ScreenManager:
 
     BoxLayout:
 
+        orientation: 'vertical'
+        
+        MDLabel:
+            text: 'Search a word in english'
+            halign: 'center'
+        
+        MDTextField:
+            id: search_vocab
+            mode: 'rectangle'
+            halign: 'center'
+        
+        MDLabel:
+            text: root.label_searchengine
+            halign: 'center'
+            
+        Button:
+            text: 'Search'
+            on_press: root.searchforword()
+
+
+
         Button:
             text: 'Back'
             on_press: 

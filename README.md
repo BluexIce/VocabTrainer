@@ -7,7 +7,7 @@ This App is in v0.11
 
 ##Attention##
 
-I´m currently working on an Android APK of this version. Right now it works under Linux and Windows 10. All you need is python3.
+I´m currently working on an Android APK of this version. Right now it works under Linux and Windows 10. All you need is python3 and kivy.
 
 A file to show how to compile it for Android will follow.
 I am developing this program in my free time, so commits may vary wildly

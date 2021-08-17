@@ -3,7 +3,7 @@ Python Kivy
 
 This is a side-project currently developed by one person.
 
-This App is in v0.11
+This App is in v0.111
 
 ##Attention##
 

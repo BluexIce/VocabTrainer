@@ -567,7 +567,6 @@ sky
 board
 joy
 winter
-sat
 written
 wild
 instrument

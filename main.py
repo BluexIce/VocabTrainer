@@ -94,11 +94,9 @@ class AddVocabularyScreen(Screen):
 
         else:
             print('it is not filled out')
-            self.snackbar_add_vocabulary = Snackbar(text='you have to fill out both fields!',
-                                                    size_hint_x='7',
-                                                    size_hint_y='7'
-                                                    )
-            self.snackbar_add_vocabulary.show()
+            self.snackbar_add_vocabulary = Snackbar(text='you have to fill out both fields!')
+            self.snackbar_add_vocabulary.show() # for mobile only!! use 101 for PC
+            #self.snackbar_add_vocabulary.open() for PC only!!
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,

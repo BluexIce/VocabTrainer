@@ -12,7 +12,7 @@ This is a side-project currently developed by one person.
 
 - I´m currently working on an Android APK of this version. Right now it works under Linux and Windows 10. All you need is python3 and kivyMD.
 
-- A file to show how to compile it for Android will follow in the near future. (with an buildozer apk file in this repository)
+- A file to show how to compile it for Android will follow in the near future. (with a buildozer apk file in this repository)
 
 
 

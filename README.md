@@ -27,7 +27,7 @@ Main Screen:
 
 Old Mockup Main Screen:
 
-- This was my first drawn mockup of how I imagined my app
+- This was my first ever drawn mockup of how I imagined my app
 
 ![grafik](https://user-images.githubusercontent.com/53760283/125158235-eb494880-e16f-11eb-8b96-722264b2a255.png)
 

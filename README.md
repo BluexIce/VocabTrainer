@@ -12,18 +12,22 @@ This is a side-project currently developed by one person.
 
 - I´m currently working on an Android APK of this version. Right now it works under Linux and Windows 10. All you need is python3 and kivyMD.
 
-- A file to show how to compile it for Android will follow in the near future.
+- A file to show how to compile it for Android will follow in the near future. (with an buildozer apk file in this repository)
 
 
 
-# App Display
+# App Preview
 
 Main Screen:
+
+- This is an outdated look of my main app page. This will be corrected soon!
 
 ![image](https://user-images.githubusercontent.com/53760283/120906979-08b16100-c65e-11eb-867e-95ed1f8ae93a.png)
 
 
 Old Mockup Main Screen:
+
+- This was my first drawn mockup of how I imagined my app
 
 ![grafik](https://user-images.githubusercontent.com/53760283/125158235-eb494880-e16f-11eb-8b96-722264b2a255.png)
 
@@ -32,7 +36,9 @@ Old Mockup Main Screen:
 
 # My Goal with this App(lication)
 
---> is to help me learn a language I want to focus on
+--> was and still is to emphasize the learning process of learing a new language. And more control over what you want to learn.
+
+- With this app you are able to define your own vocabulary and change it as you want
 
 
 # Future Plans

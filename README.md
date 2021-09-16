@@ -38,10 +38,10 @@ Old Mockup Main Screen:
 # Future Plans
 
 - [x] design a logo
-- [] develop a version focused on desktops
-- [] fix content in the android app
-- [] look into possibilities to add more content to the android app
-- [] different language support
+- [ ] develop a version focused on desktops
+- [ ] fix content in the android app
+- [ ] look into possibilities to add more content to the android app
+- [ ] different language support
 
 
 

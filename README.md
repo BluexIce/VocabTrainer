@@ -1,22 +1,22 @@
 # VocabTrainer
-Python Kivy 
+
+built with the Python Kivy/MD Framework 
 
 This is a side-project currently developed by one person.
 
-This App is in v0.111
+*This App is currently in v0.90*
 
-##Attention##
+## Attention
 
-I´m currently working on an Android APK of this version. Right now it works under Linux and Windows 10. All you need is python3 and kivy.
+- I am developing this program in my free time, so commits may vary wildly
 
-A file to show how to compile it for Android will follow.
-I am developing this program in my free time, so commits may vary wildly
+- I´m currently working on an Android APK of this version. Right now it works under Linux and Windows 10. All you need is python3 and kivyMD.
 
-
-
-It`s aim is to help me learn a language I want to focus on
+- A file to show how to compile it for Android will follow in the near future.
 
 
+
+# App Display
 
 Main Screen:
 
@@ -30,10 +30,18 @@ Old Mockup Main Screen:
 
 
 
+# My Goal with this App(lication)
+
+--> is to help me learn a language I want to focus on
 
 
+# Future Plans
 
-
+[x] design a logo
+[] develop a version focused on desktops
+[] fix content in the android app
+[] look into possibilities to add more content to the android app
+[] different language support
 
 
 

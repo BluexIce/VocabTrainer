@@ -18,24 +18,14 @@ This is a side-project currently developed by one person.
 
 # App Preview
 
-Main Screen:
-
-- This is an outdated look of my main app page. This will be corrected soon!
-
-![image](https://user-images.githubusercontent.com/53760283/120906979-08b16100-c65e-11eb-867e-95ed1f8ae93a.png)
-
-
-Mockup Main Screen:
-
-- This was my first ever drawn mockup of how I imagined my app
-
-#![grafik](https://user-images.githubusercontent.com/53760283/125158235-eb494880-e16f-11eb-8b96-722264b2a255.png)
+- Structure
 
 
 
-Main Screen                |  Mockup Screen
+Main Screen                |  Mockup Main Screen
 :-------------------------:|:-------------------------:
 ![image](https://user-images.githubusercontent.com/53760283/120906979-08b16100-c65e-11eb-867e-95ed1f8ae93a.png)   |  ![grafik](https://user-images.githubusercontent.com/53760283/125158235-eb494880-e16f-11eb-8b96-722264b2a255.png)
+                           | This was my first ever drawn mockup of how I imagined my app
 
 
 

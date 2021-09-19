@@ -14,6 +14,8 @@ This is a side-project currently developed by one person.
 
 - A file to show how to compile it for Android will follow in the near future. (with a buildozer apk file in this repository)
 
+# App Logo
+![App Image](https://user-images.githubusercontent.com/53760283/133926863-0afe167b-fc14-4142-a186-1cc268fac103.png)
 
 
 # App Preview

@@ -27,6 +27,10 @@ Main Screen                |  Mockup Main Screen
 ![grafik](https://user-images.githubusercontent.com/53760283/133926621-eed47218-ad23-4d58-9986-a33bbdcaae09.png)   |  ![grafik](https://user-images.githubusercontent.com/53760283/125158235-eb494880-e16f-11eb-8b96-722264b2a255.png)
 This is the current Main Page of my app | This was my first ever drawn mockup of how I imagined my app to look like
 Vocabulary Screen | ![grafik](https://user-images.githubusercontent.com/53760283/133926719-01011818-3e9a-4d4b-b3f2-057377a170a1.png)
+Practice Screen | ![grafik](https://user-images.githubusercontent.com/53760283/133926731-53c37f89-d8ed-484d-8676-4d67c30cca7d.png)
+4 Words Exercise | ![grafik](https://user-images.githubusercontent.com/53760283/133926743-a8024de3-031d-4c40-8e8e-17997402d42f.png)
+Scoreboard | ![grafik](https://user-images.githubusercontent.com/53760283/133926753-6d786c06-146e-46a9-ab47-5683263ac0bb.png)
+
 
 
 

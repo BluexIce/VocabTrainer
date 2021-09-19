@@ -26,9 +26,7 @@ Main Screen                |  Mockup Main Screen
 :-------------------------:|:-------------------------:
 ![grafik](https://user-images.githubusercontent.com/53760283/133926621-eed47218-ad23-4d58-9986-a33bbdcaae09.png)   |  ![grafik](https://user-images.githubusercontent.com/53760283/125158235-eb494880-e16f-11eb-8b96-722264b2a255.png)
 This is the current Main Page of my app | This was my first ever drawn mockup of how I imagined my app to look like
-
-Vocabulary Screen
-![grafik](https://user-images.githubusercontent.com/53760283/133926701-db41b51d-ac0e-4dad-84f6-dfc2a3a6538b.png)
+Vocabulary Screen | ![grafik](https://user-images.githubusercontent.com/53760283/133926719-01011818-3e9a-4d4b-b3f2-057377a170a1.png)
 
 
 

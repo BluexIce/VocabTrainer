@@ -16,7 +16,7 @@ This is a side-project currently developed by one person.
 
 # App Logo
 ![App Image](https://user-images.githubusercontent.com/53760283/133926863-0afe167b-fc14-4142-a186-1cc268fac103.png)
-
+-Self Drawn Logo for my android app
 
 # App Preview
 

@@ -6,42 +6,67 @@ ScreenManager:
     DictionaryScreen:
     VocabularyScreen:
     ExercisesScreen:
-    ComparisonScreen:
     StatisticsScreen:
-    SettingsScreen:
     OneWordScreen:
     FourWordsScreen:
-    AddVocabularyScreen:
+    Pracwrngwords:
     DeleteVocabularyScreen:
-
+    AddVocabularyScreen:
 
 <MenuScreen>:
     name: 'menu'
-
+    
+    
+    
     BoxLayout:
 
         orientation: 'vertical'
 
-        Button:
-            text: 'Dictionary' 
-            on_press: root.manager.current = 'dictionary'
 
-        Button:
-            text: 'Vocabulary' 
-            on_press: root.manager.current = 'vocabulary'
-
-        Button:
-            text: 'Exercises' 
-            on_press: root.manager.current = 'exercises'
-
-        Button:
-            text: 'Statistics'
-            on_press: root.manager.current = 'statistics'
-
-        Button:
-            text: 'Settings'
-            on_press: root.manager.current = 'settings'        
-
+        MDToolbar:
+            id: toolbar
+            title: 'Welcome - Hoşgeldin'
+            anchor_title: 'center'
+            md_bg_color: 26/255, 117/255, 255/255, 1
+            specific_text_color: 1/255, 1/255, 1/255, 1
+            #255, 117, 26
+            
+        MDBottomNavigation:
+            panel_color: 255/255, 117/255, 26/255, 1
+            #text_color_active: 26/255, 117/255, 255/255, 1
+            #text_color_normal: 255/255, 255/255, 1/255, 1
+            
+            MDBottomNavigationItem:
+                name: 'screen1'
+                text: 'Search'
+                icon: 'magnify'
+                
+                DictionaryScreen
+            
+            MDBottomNavigationItem:
+                name: 'screen2'
+                text: 'Vocabs'
+                icon: 'playlist-edit'
+                
+                VocabularyScreen
+                
+            MDBottomNavigationItem:
+                name: 'screen3'
+                text: 'Practice'
+                icon: 'heart-pulse'
+                
+                ExercisesScreen
+                
+            
+                
+            MDBottomNavigationItem:
+                name: 'screen5'
+                text: 'Score'
+                icon: 'format-list-numbered'
+                
+                StatisticsScreen
+            
+       
 <DictionaryScreen>:
     name: 'dictionary'
 
@@ -57,6 +82,11 @@ ScreenManager:
             id: search_vocab
             mode: 'rectangle'
             halign: 'center'
+            
+        
+        MDLabel:
+            text: root.label_searchengineeng
+            halign:'center'
         
         MDLabel:
             text: root.label_searchengine
@@ -66,72 +96,57 @@ ScreenManager:
             text: 'Search'
             on_press: root.searchforword()
 
-
-
-        Button:
-            text: 'Back'
-            on_press: 
-                #root.manager.transition.direction = 'right'  #moves 'back', but all screens after accessed
-                root.manager.current = 'menu'
-
-
 <VocabularyScreen>:
     name: 'vocabulary'
 
     BoxLayout:
         orientation: 'vertical'
 
-        Button:
-            text: 'Vocab List'
-
-        Button:
-            text: 'Phrases'
-
+        MDLabel:
+            text: 'Feel free to add and delete vocabulary'
+            halign: 'center'
+            
         Button:
             text: 'Add New Word'
-            on_press: root.manager.current = 'addvocabulary'
-
+            on_release: 
+                app.root.current = 'addvocabulary'
+                app.root.transition.direction = 'left'
+                
         Button:
             text: 'Delete Words'
-            on_press: root.manager.current = 'deletevocabulary'
+            on_release: 
+                app.root.current = 'deletevocabulary'
+                app.root.transition.direction = 'left'
 
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'menu'
+        
 
-
-<AddVocabularyScreen>
+<AddVocabularyScreen>        
     name: 'addvocabulary'
 
     BoxLayout:
         orientation: 'vertical'
-
+        
         MDLabel:
-            text: 'Enter the english vocab'
-
-        MDTextField:
-            id: adding_english_vocab
-            mode: 'rectangle'
-
+            text: 'Enter the english vocabulary'
+            halign: 'center'
+            
+        MDTextFieldRect:
+            id: english_input
+            size_hint: 1, None
+            height: '30dp'
+            
         MDLabel:
-            text: 'Enter the turkish vocab'
-
-        MDTextField:
-            id: adding_turkish_vocab
-            mode: 'rectangle'
-
+            text: 'Enter the turkish vocabulary'
+            halign: 'center'        
+                
+        MDTextFieldRect:
+            id: turkish_input
+            size_hint: 1, None
+            height: '30dp'
+    
         Button:
-            text: 'Add'
-            on_press: root.add_vocabulary()
-
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'vocabulary'
-
-
-
-
-
+            text: 'Add vocabulary'
+            on_release: root.add_vocabulary()
 
 
 <SelectableLabel>:
@@ -159,7 +174,7 @@ ScreenManager:
         
     Button:
         text: 'Refresh'
-        on_press: root.add_word()
+        on_release: root.add_word()
 
 <RV>:
     viewclass: 'SelectableLabel'
@@ -186,15 +201,6 @@ ScreenManager:
             effect_cls: "ScrollEffect"
             scroll_y: 0
 
-
-        Button:
-            text: 'Back'
-            size_hint: 1, .2
-            on_press: root.manager.current = 'vocabulary'
-
-
-
-
 <ExercisesScreen>:
     name: 'exercises'
 
@@ -202,42 +208,39 @@ ScreenManager:
 
         orientation: 'vertical'
 
+        MDLabel:
+            text: 'Exercise and get better by the day'
+            halign: 'center'
+        
         Button:
-            text: 'Translation'
-
-        Button:
-            text: 'Compare'
-            on_press: root.manager.current = 'comparison'
-
-        Button:
-            text: 'Time Trial'
-
+            text: 'One Word Translation'
+            on_release: 
+                app.root.current = 'oneword'
+                app.root.transition.direction = 'left'
+             
+             
         Button:
             text: '4 Words'
-            on_press: root.manager.current = 'fourword'
-
+            on_release: 
+                app.root.current = 'fourword'
+                app.root.transition.direction = 'left'
+             
+                
         Button:
-            text: 'Back'
-            on_press: root.manager.current = 'menu'
+            text: 'Practice Wrong Words'
+            on_release:
+                app.root.current = 'pracwrngwords'
+                app.root.transition.direction = 'left'
 
-<ComparisonScreen>:
-    name: 'comparison'
+        
+                
+                
+      #  Button:
+           # text: 'Back'
+          #  on_release: 
+             #   root.manager.current = 'menu'
+              #  root.manager.transition.direction = 'right'                
 
-    BoxLayout:
-
-        orientation: 'vertical'
-
-        Button:
-            text: 'One Word'
-            on_press: root.manager.current = 'oneword'
-
-        Button:
-            text: 'Multi Words'
-            
-
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'exercises'
 
 <OneWordScreen>:
     name: 'oneword'
@@ -259,14 +262,20 @@ ScreenManager:
 
         Button:
             text: 'Compare'
-            on_press: root.compare_data()
+            on_release: root.compare_data()
+
+        #Button:
+            #text: 'Back'
+            #on_release: 
+               # root.manager.current = 'comparison'
+               # root.manager.transition.direction = 'right'
             
 <FourWordsScreen>
     name: 'fourword'
-    
+
     BoxLayout:
         orientation: 'vertical'
-        
+
         MDLabel:
             text: root.fourwordslabel_Text
             halign: 'center'
@@ -274,31 +283,56 @@ ScreenManager:
         GridLayout:
             rows:2
             cols:2
-        
+
             Button:
                 text: root.fourwordbutton1_Text
-                on_press: root.compare_fourword_data(1)
-                
+                on_release: root.compare_fourword_data(1)
+
             Button:
                 text: root.fourwordbutton2_Text
-                on_press: root.compare_fourword_data(2)
-                
+                on_release: root.compare_fourword_data(2)
+
             Button:
                 text: root.fourwordbutton3_Text
-                on_press: root.compare_fourword_data(3)
-                
+                on_release: root.compare_fourword_data(3)
+
             Button:
                 text: root.fourwordbutton4_Text
-                on_press: root.compare_fourword_data(4)
+                on_release: root.compare_fourword_data(4)
 
+        #Button:
+            #text: 'Back'
+            #on_release: 
+               # root.manager.current = 'menu'
+                #root.manager.transition.direction = 'right'
 
+<Pracwrngwords>:
+    name: 'pracwrngwords'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        
+        MDLabel:
+            text: root.wrngengwrd_text
+            halign: 'center'
 
+        MDLabel:
+            text: root.wrngtrkwrd_text
+            halign: 'center'
+
+        Button:
+            text: 'Next'
+            on_release: root.show_next()
 
 <StatisticsScreen>:
     name: 'statistics'
 
     BoxLayout:
         orientation: 'vertical'
+        
+        MDLabel:
+            text: 'All your stats at one glimpse'
+            halign: 'center'
         
         GridLayout:
             cols: 2
@@ -310,25 +344,35 @@ ScreenManager:
                 id: wrong_number_counter
                 text: root.label_counter
                 halign: 'center'
-
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'menu'
-
-<SettingsScreen>:
-    name: 'settings'
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        Button:
-            text: 'Language'
-
-        Button:
-            text: 'Choose File'
-
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'menu'
-
+        
+        GridLayout:
+            cols: 2
+            
+            MDLabel:
+                text: 'Overall Word Counter'
+                halign: 'center'
+            MDLabel:
+                id: good_number_counter
+                text: root.label_counter_good
+                halign: 'center'
+        
+        GridLayout:
+            cols: 2
+            rows: 2
+            
+            Button:
+                text: 'refresh_score'
+                on_release: root.refresh_counter()
+                
+            Button:
+                text: 'Reset both counters'
+                on_release: root.reset_counter()
+            
+        
+        
+        #Button:
+            #text: 'Back'
+           # on_release: 
+               # root.manager.current = 'menu'
+               # root.manager.transition.direction = 'right'
 """

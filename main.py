@@ -1,7 +1,6 @@
 import random
 import Global
 
-
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -16,15 +15,20 @@ from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextField
 from kivymd.uix.behaviors import FocusBehavior
 from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import *
 from kivymd.uix.dialog import MDDialog
+from kivymd.theming import ThemeManager
 from kivymd.uix.list import OneLineListItem
 from kivymd.uix.snackbar import Snackbar
 
 from screen_nav import screen_helper  # import our own code from screen_nav
 
-Window.size = (360, 600)  # only for testing, remove before building!!
+
+# Window.size = (360, 600)  # only for testing, remove before building!!
 
 
 # global englishvocab
@@ -37,13 +41,11 @@ class MenuScreen(Screen):
 
 class DictionaryScreen(Screen):
     # add dictionary  --> realtime search for words with example sentences
-    
-    label_searchengine = StringProperty('test')
 
-
+    label_searchengine = StringProperty('Turkish:')
+    label_searchengineeng = StringProperty('English:')
 
     def searchforword(self):
-
 
         with open("vocab_turkish.txt", "r+") as r:
             turkishvocab = r.readlines()
@@ -63,13 +65,15 @@ class DictionaryScreen(Screen):
 
             indexenglishword = englishvocab_readable.index(self.ids.search_vocab.text)
             translated = turkishvocab_readable[indexenglishword]
-            self.label_searchengine = translated
+            word_given = englishvocab_readable[indexenglishword]
+            self.label_searchengine = 'Turkish: ' + translated
+            self.label_searchengineeng = 'English: ' + word_given
+            self.ids.search_vocab.text = ''
         else:
             self.label_searchengine = 'No entry for ' + self.ids.search_vocab.text
+            self.label_searchengineeng = ''
+            self.ids.search_vocab.text = ''
 
-
-
-    
     pass
 
 
@@ -80,23 +84,22 @@ class VocabularyScreen(Screen):
 class AddVocabularyScreen(Screen):
 
     def add_vocabulary(self):
+        # print('hello')
 
-        if self.ids.adding_english_vocab.text and self.ids.adding_turkish_vocab.text != '':  # is None does not work properly
-            print('there is data')
-            with open("vocab_english.txt", "a+", encoding='utf8') as e:
-                e.write(self.ids.adding_english_vocab.text + "\n")
+        if self.ids.english_input.text and self.ids.turkish_input.text != '':
+            with open('vocab_english.txt', 'a+') as appnd1:
+                appnd1.write(self.ids.english_input.text + '\n')
 
-            with open("vocab_turkish.txt", "a+", encoding='utf8')as t:
-                t.write(self.ids.adding_turkish_vocab.text + "\n")
+            with open('vocab_turkish.txt', 'a+') as appnd2:
+                appnd2.write(self.ids.turkish_input.text + '\n')
 
-            self.ids.adding_english_vocab.text = ''
-            self.ids.adding_turkish_vocab.text = ''
-
+            self.ids.english_input.text = ''
+            self.ids.turkish_input.text = ''
         else:
-            print('it is not filled out')
+            # print('it is not filled out')
             self.snackbar_add_vocabulary = Snackbar(text='you have to fill out both fields!')
-            self.snackbar_add_vocabulary.show() # for mobile only!! use 101 for PC
-            #self.snackbar_add_vocabulary.open() for PC only!!
+            self.snackbar_add_vocabulary.show()  # for mobile only!! use 101 for PC
+            # self.snackbar_add_vocabulary.open() for PC only!!
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
@@ -111,20 +114,17 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
     selectable = BooleanProperty(True)
     cols = 3
 
-
     def refresh_view_attrs(self, rv, index, data):
         ''' Catch and handle the view changes '''
         self.index = index
-        #self.label1_text = str(index)
+        # self.label1_text = str(index)
         self.ids['id_label1'].text = str(index)
         self.ids['id_label2'].text = data['label2']['text']
-        #self.label2_text = data['label2']['text']
-        #self.label3_text = data['label3']['text']
+        # self.label2_text = data['label2']['text']
+        # self.label3_text = data['label3']['text']
         self.ids['id_label3'].text = data['label3']['text']
         return super(SelectableLabel, self).refresh_view_attrs(
             rv, index, data)
-
-
 
     def on_touch_down(self, touch):
         ''' Add selection on touch down '''
@@ -137,8 +137,7 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
             return True
         if self.collide_point(*touch.pos) and self.selectable:
 
-
-            #todo check this --> why no turkish list?
+            # todo check this --> why no turkish list?
             with open("vocab_english.txt", "r+") as r:
 
                 englishvocab = r.readlines()
@@ -147,10 +146,9 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
                 for english_element in englishvocab:
                     englishvocab_readable.append(english_element.strip())
 
-
-            if len(englishvocab_readable) < 2:
+            if len(englishvocab_readable) < 6:
                 self.dialog_prevent_zero_vocabs = MDDialog(title='Warning!',
-                                                           text='You cannot delete the last vocab in a file',
+                                                           text='You cannot delete the last five vocabs in a file',
                                                            size_hint=(0.7, 1),
                                                            buttons=[warning_received_button]
                                                            )
@@ -160,22 +158,18 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
             else:
 
                 self.dialog_delete_vocab = MDDialog(title='Delete Vocab?',
-                                                    text= 'Delete'
-                                                          ' ' + self.ids['id_label2'].text + ' ?',
+                                                    text='Delete'
+                                                         ' ' + self.ids['id_label2'].text + ' ?',
                                                     size_hint=(0.7, 1),
                                                     buttons=[yes_delete_word_button, no_dont_delete_word_button]
                                                     )
 
                 self.dialog_delete_vocab.open()
 
-
-
-                #MDDialog to check if you want to delet the word?
-                #Move to JSON instead of textfiles?
-                #copy just the rv code to new project to look at it more in depth
+                # MDDialog to check if you want to delet the word?
+                # Move to JSON instead of textfiles?
+                # copy just the rv code to new project to look at it more in depth
                 return self.parent.select_with_touch(self.index, touch)  # highlits itself
-
-
 
     def delete_word(self, obj):
         self.parent.parent.data.pop(self.index)  # deletes the entry but does not save it
@@ -213,14 +207,11 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
 
         self.dialog_delete_vocab.dismiss()
 
-
     def dont_delete_word(self, obj):
         self.dialog_delete_vocab.dismiss()
 
-
     def warning_received(self, obj):
         self.dialog_prevent_zero_vocabs.dismiss()
-
 
     def apply_selection(self, rv, index, is_selected):
         ''' Respond to the selection of items in the view. '''
@@ -241,14 +232,13 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
 
 
         else:
-            #print("selection removed for {0}".format(rv.data[index]))
+            # print("selection removed for {0}".format(rv.data[index]))
             pass
-
 
     def add_word(self):
 
         test = 'test'
-        test2 ='test2'
+        test2 = 'test2'
 
         # insert_vocab_into_rv ={'label2': {'text': test}, 'label3': {'text': test2}}
         # self.parent.parent.data.append(insert_vocab_into_rv)
@@ -257,9 +247,9 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
 
         # self.ids['id_label1'].text = str(index)
 
-        #print(len(self.parent.parent.data))  # length of the index list #1000
+        # print(len(self.parent.parent.data))  # length of the index list #1000
 
-        #open english list
+        # open english list
         with open("vocab_english.txt", "r+") as r:
 
             englishvocab = r.readlines()
@@ -268,7 +258,7 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
             for english_element in englishvocab:
                 englishvocab_readable.append(english_element.strip())
 
-        #open turkish list
+        # open turkish list
         with open("vocab_turkish.txt", "r+") as r:
             turkishvocab = r.readlines()
             turkishvocab_readable = []
@@ -276,23 +266,24 @@ class SelectableLabel(RecycleDataViewBehavior, GridLayout):
             for turkish_element in turkishvocab:
                 turkishvocab_readable.append(turkish_element.strip())
 
-        #print(len(englishvocab_readable))
+        # print(len(englishvocab_readable))
 
         if len(self.parent.parent.data) != len(englishvocab_readable):
             numberone = len(englishvocab_readable)
             numbertwo = len(self.parent.parent.data)
 
             solution = numberone - numbertwo
-            countbackwardsnumber = (len(englishvocab_readable) -1)
+            countbackwardsnumber = (len(englishvocab_readable) - 1)
             entryfrommiddle = countbackwardsnumber - solution
 
             for x in range(solution):
-                #count = countbackwardsnumber - x
+                # count = countbackwardsnumber - x
                 entryfrommiddle += 1
-                #print(englishvocab_readable[count])  # prints the entries from last to solution
-                insert_vocab_into_rv = {'label2': {'text': englishvocab_readable[entryfrommiddle]}, 'label3': {'text': turkishvocab_readable[entryfrommiddle]}}
+                # print(englishvocab_readable[count])  # prints the entries from last to solution
+                insert_vocab_into_rv = {'label2': {'text': englishvocab_readable[entryfrommiddle]},
+                                        'label3': {'text': turkishvocab_readable[entryfrommiddle]}}
                 self.parent.parent.data.append(insert_vocab_into_rv)
-                #entryfrommiddle += 1
+                # entryfrommiddle += 1
 
         # insert_vocab_into_rv ={'label2': {'text': test}, 'label3': {'text': test2}}
         # self.parent.parent.data.append(insert_vocab_into_rv)
@@ -471,14 +462,9 @@ class ExercisesScreen(Screen):
     pass
 
 
-class ComparisonScreen(Screen):
-    pass
-
-
 class OneWordScreen(Screen):
-
-    #global counter_wrong
-    #counter_wrong = 0
+    # global counter_wrong
+    # counter_wrong = 0
     wrong_word_list = []
 
     # label_Text = StringProperty(englishvocab_readable[random_number])
@@ -522,6 +508,25 @@ class OneWordScreen(Screen):
                                             buttons=[close_button_one_word, move_to_next_vocab_button]
                                             )
             self.dialog_one_word.open()
+
+            with open("good_vocabs_cnt.txt", "r") as goodvcbs:
+                goodnumber = goodvcbs.read()
+
+            if goodnumber != "":
+                Global.good_vocab_number = int(goodnumber)
+
+            Global.good_vocab_number += 1
+
+            with open("good_vocabs_cnt.txt", "w") as goodvcbs:
+                goodvcbs.write(str(Global.good_vocab_number))
+
+            with open("wrong_vocabs.txt", "r") as wrngvcb_r:
+                number = wrngvcb_r.read()
+
+            if number != "":
+                Global.my_number = int(number)
+
+            self.manager.get_screen('statistics').label_counter_good = str(Global.good_vocab_number + Global.my_number)
         else:
             self.dialog_one_word = MDDialog(title='Check Vocab',
                                             text=self.turkishvocab_readable[
@@ -542,12 +547,21 @@ class OneWordScreen(Screen):
             with open("wrong_vocabs.txt", "w") as wrngvcb_w:
                 wrngvcb_w.write(str(Global.my_number))
 
-
             self.manager.get_screen('statistics').label_counter = str(Global.my_number)
-            #self.counter_wrong += 1
-            #self.wrong_word_list.append(self.turkishvocab_readable[self.random_number])
 
+            # catch the wrong vocabs english and turkish
+            with open("wrong_done_words_t.txt", "a+") as wdwt:
+                wdwt.write(self.turkishvocab_readable[self.random_number] + "\n")
 
+            # indexhelperturkish = self.turkishvocab_readable[self.random_number]
+
+            catchengwrngwrd = self.englishvocab_readable[self.random_number]
+
+            with open("wrong_done_words_e.txt", "a+") as wdwe:
+                wdwe.write(catchengwrngwrd + "\n")
+
+            # self.counter_wrong += 1
+            # self.wrong_word_list.append(self.turkishvocab_readable[self.random_number])
 
     def close_dialog(self, obj):
         self.dialog_one_word.dismiss()
@@ -579,13 +593,11 @@ class OneWordScreen(Screen):
             for english_element in englishvocab:
                 englishvocab_readable.append(english_element.strip())
 
-
         if englishvocab_readable == self.englishvocab_readable:
             pass
         else:
             self.englishvocab_readable = englishvocab_readable
             self.turkishvocab_readable = turkishvocab_readable
-
 
         self.random_number = random.randint(0, len(self.englishvocab_readable) - 1)
         self.label_Text = self.englishvocab_readable[
@@ -593,14 +605,12 @@ class OneWordScreen(Screen):
 
         self.ids.turkish_input.text = ''
 
-
         # self.random_number = random.randint(0, len(self.englishvocab_readable) - 1)
         # self.englishvocab_readable[self.random_number] = self.label_Text
         # print('something happened')
 
 
 class FourWordsScreen(Screen):
-
     global random_numbers_answers_fourword
     with open("vocab_english.txt", "r+", encoding='utf8') as ve:
         englishvocab = ve.readlines()
@@ -620,10 +630,10 @@ class FourWordsScreen(Screen):
 
     random_number_solution_fourword = random.randint(0, len(englishvocab_readable) - 1)
 
-    random_numbers_answers_fourword = random.sample(range(0, len(turkishvocab_readable) - 1), 4)  # get index #works on its own
+    random_numbers_answers_fourword = random.sample(range(0, len(turkishvocab_readable) - 1),
+                                                    4)  # get index #works on its own
 
-
-    word1 = englishvocab_readable[random_numbers_answers_fourword[0]] #get word
+    word1 = englishvocab_readable[random_numbers_answers_fourword[0]]  # get word
     word2 = englishvocab_readable[random_numbers_answers_fourword[1]]
     word3 = englishvocab_readable[random_numbers_answers_fourword[2]]
     word4 = englishvocab_readable[random_numbers_answers_fourword[3]]
@@ -637,16 +647,14 @@ class FourWordsScreen(Screen):
 
     eng_list = [eng_compare1, eng_compare2, eng_compare3, eng_compare4]
 
-    word1index = englishvocab_readable.index(word1)#gets index of the value from the long array index
+    word1index = englishvocab_readable.index(word1)  # gets index of the value from the long array index
     word2index = englishvocab_readable.index(word2)
     word3index = englishvocab_readable.index(word3)
     word4index = englishvocab_readable.index(word4)
 
     wordlistenglishindex = [word1index, word2index, word3index, word4index]
 
-
-
-    word1turkish = turkishvocab_readable[word1index] #word
+    word1turkish = turkishvocab_readable[word1index]  # word
     word2turkish = turkishvocab_readable[word2index]  # word
     word3turkish = turkishvocab_readable[word3index]  # word
     word4turkish = turkishvocab_readable[word4index]  # word
@@ -660,20 +668,19 @@ class FourWordsScreen(Screen):
 
     trk_list = [trk_compare1, trk_compare2, trk_compare3, trk_compare4]
 
-    word1turkishindex = turkishvocab_readable.index(word1turkish) #index of word from long array with english index value
+    word1turkishindex = turkishvocab_readable.index(
+        word1turkish)  # index of word from long array with english index value
     word2turkishindex = turkishvocab_readable.index(word2turkish)
     word3turkishindex = turkishvocab_readable.index(word3turkish)
     word4turkishindex = turkishvocab_readable.index(word4turkish)
 
     wordlistturkishindex = [word1turkishindex, word2turkishindex, word3turkishindex, word4turkishindex]
 
-    #todo give each random_number a different index each time  --> they are str
-    #todo get the index behind the str
-    #done boxlayout for the four buttons --> arrange like 2 | 2
+    # todo give each random_number a different index each time  --> they are str
+    # todo get the index behind the str
+    # done boxlayout for the four buttons --> arrange like 2 | 2
 
-
-    #todo randmoize
-
+    # todo randmoize
 
     inbetween1 = word1turkish
     inbetween2 = word2turkish
@@ -682,23 +689,17 @@ class FourWordsScreen(Screen):
 
     inbetweenarray = [inbetween1, inbetween2, inbetween3, inbetween4]
 
+    # todo #done randomize the index of the array with an array in between
+    index_shuffle = [0, 1, 2, 3]
 
-    #todo #done randomize the index of the array with an array in between
-    haa = [0, 1, 2, 3]
+    random.shuffle(index_shuffle)
 
-    random.shuffle(haa)
+    fourwordbutton1_Text = StringProperty(inbetweenarray[index_shuffle[0]])
+    fourwordbutton2_Text = StringProperty(inbetweenarray[index_shuffle[1]])
+    fourwordbutton3_Text = StringProperty(inbetweenarray[index_shuffle[2]])
+    fourwordbutton4_Text = StringProperty(inbetweenarray[index_shuffle[3]])
 
-    fourwordbutton1_Text =StringProperty(inbetweenarray[haa[0]])
-    fourwordbutton2_Text =StringProperty(inbetweenarray[haa[1]])
-    fourwordbutton3_Text =StringProperty(inbetweenarray[haa[2]])
-    fourwordbutton4_Text =StringProperty(inbetweenarray[haa[3]])
-
-
-
-
-    fourwordslabel_Text = StringProperty(wordlistenglish[0]) #wordlistenglishindex[0]
-
-
+    fourwordslabel_Text = StringProperty(wordlistenglish[0])  # wordlistenglishindex[0]
 
     def compare_fourword_data(self, index):
 
@@ -708,19 +709,38 @@ class FourWordsScreen(Screen):
         close_button_fourword = MDFlatButton(text='Close', on_release=self.close_dialog_four)
         move_to_next_four_button = MDFlatButton(text='Next', on_release=self.move_forward_four)
 
-        if self.index-1 == self.haa.index(0):
+        if self.index - 1 == self.index_shuffle.index(0):
             self.dialog_four_word = MDDialog(title='Check Vocab',
-                                            text='good one',
-                                            size_hint=(0.7, 1),
-                                            buttons=[close_button_fourword, move_to_next_four_button]
+                                             text='good one',
+                                             size_hint=(0.7, 1),
+                                             buttons=[close_button_fourword, move_to_next_four_button]
                                              )
             self.dialog_four_word.open()
 
+            with open("good_vocabs_cnt.txt", "r") as goodvcbs:
+                goodnumber = goodvcbs.read()
+
+            if goodnumber != "":
+                Global.good_vocab_number = int(goodnumber)
+
+            Global.good_vocab_number += 1
+
+            with open("good_vocabs_cnt.txt", "w") as goodvcbs:
+                goodvcbs.write(str(Global.good_vocab_number))
+
+            with open("wrong_vocabs.txt", "r") as wrngvcb_r:
+                number = wrngvcb_r.read()
+
+            if number != "":
+                Global.my_number = int(number)
+
+            self.manager.get_screen('statistics').label_counter_good = str(Global.good_vocab_number + Global.my_number)
+
         else:
             self.dialog_four_word = MDDialog(title='Check Vocab',
-                                            text= self.word1turkish + ' would have been right',
-                                            size_hint=(0.7, 1),
-                                            buttons=[move_to_next_four_button]
+                                             text=self.word1turkish + ' would have been right',
+                                             size_hint=(0.7, 1),
+                                             buttons=[move_to_next_four_button]
                                              )
             self.dialog_four_word.open()
 
@@ -735,10 +755,34 @@ class FourWordsScreen(Screen):
             with open("wrong_vocabs.txt", "w") as wrngvcb_w:
                 wrngvcb_w.write(str(Global.my_number))
 
+            with open("good_vocabs_cnt.txt", "r") as goodvcbs:
+                goodnumber = goodvcbs.read()
+
+            if goodnumber != "":
+                Global.good_vocab_number = int(goodnumber)
+
+            with open("good_vocabs_cnt.txt", "w") as goodvcbs:
+                goodvcbs.write(str(Global.good_vocab_number))
 
             self.manager.get_screen('statistics').label_counter = str(Global.my_number)
+            self.manager.get_screen('statistics').label_counter_good = str(Global.good_vocab_number + Global.my_number)
 
+            # catch wrong words
 
+            # indexhelperturkish = self.turkishvocab_readable[self.random_number]
+
+            catchengwrngwrd4 = self.wordlistenglish[0]
+            catchtkrwrngwrd4 = self.wordlistturkish[0]
+
+            with open("wrong_done_words_e.txt", "a+") as wdwe4:
+                wdwe4.write(catchengwrngwrd4 + "\n")
+
+            with open("wrong_done_words_t.txt", "a+") as wdwt4:
+                wdwt4.write(catchtkrwrngwrd4 + "\n")
+
+            # self.manager.get_screen('statistics').label_counter_good = str(sum) #works
+            # print(self.manager.get_screen('statistics').label_counter_good)
+            # print(str(Global.my_number))
 
     def close_dialog_four(self, obj):
         self.dialog_four_word.dismiss()
@@ -768,17 +812,15 @@ class FourWordsScreen(Screen):
             for english_element in englishvocab:
                 englishvocab_readable.append(english_element.strip())
 
-
         if englishvocab_readable == self.englishvocab_readable:
             pass
         else:
             self.englishvocab_readable = englishvocab_readable
             self.turkishvocab_readable = turkishvocab_readable
 
-
         self.random_number_solution_fourword = random.randint(0, len(self.englishvocab_readable) - 1)
-        self.random_numbers_answers_fourword = random.sample(range(0, len(self.turkishvocab_readable) - 1),4)  # get index #works on its own
-
+        self.random_numbers_answers_fourword = random.sample(range(0, len(self.turkishvocab_readable) - 1),
+                                                             4)  # get index #works on its own
 
         self.word1 = self.englishvocab_readable[self.random_numbers_answers_fourword[0]]  # get word
         self.word2 = self.englishvocab_readable[self.random_numbers_answers_fourword[1]]
@@ -795,7 +837,8 @@ class FourWordsScreen(Screen):
         self.eng_list = [self.eng_compare1, self.eng_compare2, self.eng_compare3, self.eng_compare4]
 
         # needed to get index for turkish index
-        self.word1index = self.englishvocab_readable.index(self.word1)  # gets index of the value from the long array index
+        self.word1index = self.englishvocab_readable.index(
+            self.word1)  # gets index of the value from the long array index
         self.word2index = self.englishvocab_readable.index(self.word2)
         self.word3index = self.englishvocab_readable.index(self.word3)
         self.word4index = self.englishvocab_readable.index(self.word4)
@@ -816,12 +859,14 @@ class FourWordsScreen(Screen):
 
         self.trk_list = [self.trk_compare1, self.trk_compare2, self.trk_compare3, self.trk_compare4]
 
-        self.word1turkishindex = self.turkishvocab_readable.index(self.word1turkish)  # index of word from long array with english index value
+        self.word1turkishindex = self.turkishvocab_readable.index(
+            self.word1turkish)  # index of word from long array with english index value
         self.word2turkishindex = self.turkishvocab_readable.index(self.word2turkish)
         self.word3turkishindex = self.turkishvocab_readable.index(self.word3turkish)
         self.word4turkishindex = self.turkishvocab_readable.index(self.word4turkish)
 
-        self.wordlistturkishindex = [self.word1turkishindex, self.word2turkishindex, self.word3turkishindex, self.word4turkishindex]
+        self.wordlistturkishindex = [self.word1turkishindex, self.word2turkishindex, self.word3turkishindex,
+                                     self.word4turkishindex]
 
         self.inbetween1 = self.word1turkish
         self.inbetween2 = self.word2turkish
@@ -830,21 +875,18 @@ class FourWordsScreen(Screen):
 
         self.inbetweenarray = [self.inbetween1, self.inbetween2, self.inbetween3, self.inbetween4]
 
+        self.index_shuffle = [0, 1, 2, 3]
 
-        self.haa = [0, 1, 2, 3]
+        random.shuffle(self.index_shuffle)
 
-        random.shuffle(self.haa)
+        self.fourwordbutton1_Text = self.inbetweenarray[self.index_shuffle[0]]
+        self.fourwordbutton2_Text = self.inbetweenarray[self.index_shuffle[1]]
+        self.fourwordbutton3_Text = self.inbetweenarray[self.index_shuffle[2]]
+        self.fourwordbutton4_Text = self.inbetweenarray[self.index_shuffle[3]]
 
-        self.fourwordbutton1_Text = self.inbetweenarray[self.haa[0]]
-        self.fourwordbutton2_Text = self.inbetweenarray[self.haa[1]]
-        self.fourwordbutton3_Text = self.inbetweenarray[self.haa[2]]
-        self.fourwordbutton4_Text = self.inbetweenarray[self.haa[3]]
-
-
-        self.fourwordslabel_Text = self.wordlistenglish[0] # wordlistenglishindex[0]
+        self.fourwordslabel_Text = self.wordlistenglish[0]  # wordlistenglishindex[0]
 
         '''help = self.index-1
-
         if self.wordlistturkishindex[help] == self.wordlistenglishindex[0]:
             print('solution')
             print(self.wordlistturkishindex[self.index-1])
@@ -854,21 +896,109 @@ class FourWordsScreen(Screen):
         else:
             print('back to the drawing board')'''
 
-        #if self.index == self.word1index: # self.englishvocab_readable[self.random_number_solution_fourword]:
-         #   print('good')
+        # if self.index == self.word1index: # self.englishvocab_readable[self.random_number_solution_fourword]:
+        #   print('good')
 
-        #else:
-         #   print('not good')
-          #  print(self.index)
+        # else:
+        #   print('not good')
+        #  print(self.index)
 
-            #print(self.englishvocab_readable.index(self.random_number_solution_fourword)-1) #not in list
+        # print(self.englishvocab_readable.index(self.random_number_solution_fourword)-1) #not in list
 
+
+class Pracwrngwords(Screen):
+
+    def on_pre_enter(self, *args):
+        self.wrngengwrd_text = str('Start \n \n reviewing your wrong vocabs')
+        self.wrngtrkwrd_text = str('Yanlış kelime dağarcığınızı gözden geçirmeye \n \n başlayın')
+
+    wrngengwrd_text = StringProperty('')
+    wrngtrkwrd_text = StringProperty('')
+
+    with open("wrong_done_words_t.txt", "r") as wdwt:
+        turkish_wrng_wrd = wdwt.readlines()
+
+    with open("wrong_done_words_e.txt", "r") as wdwe:
+        english_wrng_wrd = wdwe.readlines()
+
+    turkishvocab_readable = []
+
+    for turkish_element in turkish_wrng_wrd:
+        turkishvocab_readable.append(turkish_element.strip())
+
+    englishvocab_readable = []
+
+    for english_element in english_wrng_wrd:
+        englishvocab_readable.append(english_element.strip())
+
+    countervar = len(englishvocab_readable)  # 10
+
+    '''with open("counter.txt", 'r') as cnt:
+        textnbm = cnt.readlines()'''
+
+    upcounter = int(0)  # int(textnbm[0])
+    print(upcounter)
+
+    def show_next(self):
+
+        # all_words_corrected_button
+        a_w_c_button = MDFlatButton(text='Understood', on_release=self.a_w_c)
+
+        # print(self.upcounter)
+        '''
+        if self.upcounter < self.countervar:
+            self.wrngengwrd_text = str(self.englishvocab_readable[self.upcounter])
+            self.wrngtrkwrd_text = str(self.turkishvocab_readable[self.upcounter])
+
+            self.englishvocab_readable.pop(self.upcounter)
+            self.turkishvocab_readable.pop(self.upcounter)
+
+            #print(self.englishvocab_readable.pop(self.upcounter))
+
+            #self.upcounter += 1
+            print('this is interesting', self.upcounter)
+        '''
+        if len(self.englishvocab_readable) >= 1:
+            self.wrngengwrd_text = str(self.englishvocab_readable[self.upcounter])
+            self.wrngtrkwrd_text = str(self.turkishvocab_readable[self.upcounter])
+
+            self.englishvocab_readable.pop(self.upcounter)
+            self.turkishvocab_readable.pop(self.upcounter)
+
+            # print(self.englishvocab_readable.pop(self.upcounter))
+
+            # self.upcounter += 1
+            # print('this is interesting', self.upcounter)
+
+            with open("wrong_done_words_e.txt", "w") as corrected:  # fills the file with the new array
+                for word in self.englishvocab_readable:
+                    corrected.write(word + "\n")
+
+            with open("wrong_done_words_t.txt", "w") as w:
+                for word in self.turkishvocab_readable:
+                    w.write(word + "\n")
+
+
+        else:
+            self.dialog_prevent_zero_wrongs = MDDialog(title='Your done!',
+                                                       text='All words reviewed',
+                                                       buttons=[a_w_c_button])
+
+            self.dialog_prevent_zero_wrongs.open()
+
+            # print(self.upcounter)
+        # self.wrngengwrd_text = str(englishvocab_readable[x])
+        # self.wrngtrkwrd_text = str(turkishvocab_readable[x])
+
+    def a_w_c(self, obj):
+        self.dialog_prevent_zero_wrongs.dismiss()
+        self.parent.current = 'menu'
 
 
 class StatisticsScreen(Screen):
     # display vocabs you did wrong --> another rv ?
     # ranking list, how many vocabs have been compared overall
-    #global counter_wrong
+    # global counter_wrong
 
     with open("wrong_vocabs.txt", "r") as number_false:
         number = number_false.read()
@@ -876,18 +1006,66 @@ class StatisticsScreen(Screen):
     if number == "":
         number = "0"
 
-    label_counter = StringProperty(number)
+    with open("good_vocabs_cnt.txt", "r") as number_good:
+        goodnumber = number_good.read()
+
+    if goodnumber == "":
+        goodnumber = "0"
+
+    overallcount = int(number) + int(goodnumber)
+
+    label_counter = StringProperty(str(number))
+    label_counter_good = StringProperty(str(overallcount))
+
+    def reset_counter(self):
+
+        with open("wrong_vocabs.txt", "w") as wrngvcb_w:
+            wrngvcb_w.write(str(0))
+
+        with open("good_vocabs_cnt.txt", "w") as goodvcbs:
+            goodvcbs.write(str(0))
+
+        self.label_counter = str(0)
+        self.label_counter_good = str(0)
+        # self.manager.get_screen('statistics').label_counter_good = str(Global.my_number)
+
+    def refresh_counter(self):
+        with open("wrong_vocabs.txt", "r") as number_false:
+            number = number_false.read()
+
+        if number == "":
+            number = "0"
+
+        with open("good_vocabs_cnt.txt", "r") as number_good:
+            goodnumber = number_good.read()
+
+        if goodnumber == "":
+            goodnumber = "0"
+
+        overallcount = int(number) + int(goodnumber)
+
+        self.label_counter = str(number)
+        self.label_counter_good = str(overallcount)
 
 
-
-
+'''
 class SettingsScreen(Screen):
     # language menu to select overlay language
     # choose different txt files to practice
     # load your own txt files into the app
+    #def reset_counter_score(self):
 
+        #with open("wrong_vocabs.txt", "w") as wrngvcb_w:
+          #  wrngvcb_w.write(str(0))
 
+        #with open("good_vocabs_cnt.txt", "w") as goodvcbs:
+          #  goodvcbs.write(str(0))
+        #self.parent.manager.get_screen('screen5').label_counter = str(0)
+        #print(self.parent.manager.get_screen('screen5'))
+        #self.parent.parent.parent.parent.parent.manager.get_screen('statistics').label_counter = str(0) #works, just gets not updated, only after restart
+        #print(self.parent.manager.get_screen('screen5'))
     pass
+'''
 
 
 class DemoApp(MDApp):
@@ -900,17 +1078,53 @@ class DemoApp(MDApp):
         sm.add_widget(MenuScreen(name='addvocabulary'))
         sm.add_widget(MenuScreen(name='deletevocabulary'))
         sm.add_widget(MenuScreen(name='exercises'))
-        sm.add_widget(MenuScreen(name='comparison'))
         sm.add_widget(MenuScreen(name='oneword'))
         sm.add_widget(MenuScreen(name='fourword'))
+        sm.add_widget(MenuScreen(name='pracwrngwords'))
 
         sm.add_widget(MenuScreen(name='statistics'))
-        sm.add_widget(MenuScreen(name='settings'))
+        # sm.add_widget(MenuScreen(name='settings'))
         screen = Builder.load_string(screen_helper)
+
+        #self.theme_cls.primary_palette = "Gray"
+        # self.theme_cls.theme_style = "Light"
+        # self.theme_cls.primary_palette = "Yellow"
+        # self.theme_cls.accent_palette = "Cyan"
+        # self.theme_cls.primary_hue = "100"
+
         return screen
 
     def on_start(self):
-        self.fps_monitor_start()
+        # self.fps_monitor_start()
+        Window.bind(on_keyboard=self.hook_keyboard)
+
+    def hook_keyboard(self, window, key, *largs):
+
+        if key == 27:
+
+            if self.root.current == 'menu':
+                return False
+
+            elif self.root.current == 'deletevocabulary':
+                self.root.current = 'menu'
+                self.root.transition.direction = 'right'
+                return True
+            elif self.root.current == 'addvocabulary':
+                self.root.current = 'menu'
+                self.root.transition.direction = 'right'
+                return True
+            elif self.root.current == 'oneword':
+                self.root.current = 'menu'
+                self.root.transition.direction = 'right'
+                return True
+            elif self.root.current == 'fourword':
+                self.root.current = 'menu'
+                self.root.transition.direction = 'right'
+                return True
+            elif self.root.current == 'pracwrngwords':
+                self.root.current = 'menu'
+                self.root.transition.direction = 'right'
+                return True
 
 
 DemoApp().run()

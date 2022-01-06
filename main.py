@@ -915,23 +915,7 @@ class Pracwrngwords(Screen):
     wrngengwrd_text = StringProperty('')
     wrngtrkwrd_text = StringProperty('')
 
-    with open("wrong_done_words_t.txt", "r") as wdwt:
-        turkish_wrng_wrd = wdwt.readlines()
-
-    with open("wrong_done_words_e.txt", "r") as wdwe:
-        english_wrng_wrd = wdwe.readlines()
-
-    turkishvocab_readable = []
-
-    for turkish_element in turkish_wrng_wrd:
-        turkishvocab_readable.append(turkish_element.strip())
-
-    englishvocab_readable = []
-
-    for english_element in english_wrng_wrd:
-        englishvocab_readable.append(english_element.strip())
-
-    countervar = len(englishvocab_readable)  # 10
+    
 
     '''with open("counter.txt", 'r') as cnt:
         textnbm = cnt.readlines()'''
@@ -940,6 +924,8 @@ class Pracwrngwords(Screen):
     print(upcounter)
 
     def show_next(self):
+
+        #TODO   in this method update the englishvocab_readable if it changes
 
         # all_words_corrected_button
         a_w_c_button = MDFlatButton(text='Understood', on_release=self.a_w_c)
@@ -958,12 +944,32 @@ class Pracwrngwords(Screen):
             #self.upcounter += 1
             print('this is interesting', self.upcounter)
         '''
-        if len(self.englishvocab_readable) >= 1:
-            self.wrngengwrd_text = str(self.englishvocab_readable[self.upcounter])
-            self.wrngtrkwrd_text = str(self.turkishvocab_readable[self.upcounter])
 
-            self.englishvocab_readable.pop(self.upcounter)
-            self.turkishvocab_readable.pop(self.upcounter)
+        with open("wrong_done_words_t.txt", "r") as wdwt:
+            turkish_wrng_wrd = wdwt.readlines()
+
+        with open("wrong_done_words_e.txt", "r") as wdwe:
+            english_wrng_wrd = wdwe.readlines()
+
+        turkishvocab_readable = []
+
+        for turkish_element in turkish_wrng_wrd:
+            turkishvocab_readable.append(turkish_element.strip())
+
+        englishvocab_readable = []
+
+        for english_element in english_wrng_wrd:
+            englishvocab_readable.append(english_element.strip())
+
+        countervar = len(englishvocab_readable)  # 10
+
+
+        if len(englishvocab_readable) >= 1:
+            self.wrngengwrd_text = str(englishvocab_readable[self.upcounter])
+            self.wrngtrkwrd_text = str(turkishvocab_readable[self.upcounter])
+
+            englishvocab_readable.pop(self.upcounter)
+            turkishvocab_readable.pop(self.upcounter)
 
             # print(self.englishvocab_readable.pop(self.upcounter))
 
@@ -971,11 +977,11 @@ class Pracwrngwords(Screen):
             # print('this is interesting', self.upcounter)
 
             with open("wrong_done_words_e.txt", "w") as corrected:  # fills the file with the new array
-                for word in self.englishvocab_readable:
+                for word in englishvocab_readable:
                     corrected.write(word + "\n")
 
             with open("wrong_done_words_t.txt", "w") as w:
-                for word in self.turkishvocab_readable:
+                for word in turkishvocab_readable:
                     w.write(word + "\n")
 
 
@@ -985,6 +991,7 @@ class Pracwrngwords(Screen):
                                                        buttons=[a_w_c_button])
 
             self.dialog_prevent_zero_wrongs.open()
+            #print(len(self.englishvocab_readable))
 
             # print(self.upcounter)
         # self.wrngengwrd_text = str(englishvocab_readable[x])
@@ -993,6 +1000,8 @@ class Pracwrngwords(Screen):
     def a_w_c(self, obj):
         self.dialog_prevent_zero_wrongs.dismiss()
         self.parent.current = 'menu'
+
+
 
 
 class StatisticsScreen(Screen):

@@ -4,7 +4,7 @@ built with the Python Kivy/MD Framework
 
 This is a side-project currently developed by one person.
 
-*This App is currently in v0.91*
+*This App is currently in v1.0*
 
 ## Attention
 

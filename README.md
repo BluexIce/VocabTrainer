@@ -49,7 +49,7 @@ Scoreboard | ![grafik](https://user-images.githubusercontent.com/53760283/133926
 
 - [x] design a logo
 - [ ] develop a version focused on desktops
-- [ ] fix content in the android app
+- [x] fix content in the android app
 - [ ] look into possibilities to add more content to the android app
 - [ ] different language support
 
